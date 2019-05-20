@@ -1,0 +1,22 @@
+.adminContent{
+  padding-top: 56px;
+  padding-left: 240px;
+}
+.dashboard{
+  /*text-align: left;*/
+}
+.dashboard .returns {
+  max-height: 50vh;
+}
+
+.returnsLegend {
+  color: #fff;
+  background-color: #FDB45C;
+  border-color: #FDB45C;
+}
+
+.setupsLegend {
+  color: #fff;
+  background-color: #46BFBD;
+  border-color: #46BFBD;
+}

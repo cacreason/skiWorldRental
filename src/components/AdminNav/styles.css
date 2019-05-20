@@ -1,0 +1,13 @@
+.AdminNav .navbar {
+  justify-content: start;
+}
+.AdminNav .navbar-collapse {
+  width: 240px;
+  height: 100vh;
+  text-align: left;
+}
+.AdminNav .nav-item {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  margin-top: 1.5rem;
+}

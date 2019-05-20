@@ -1,0 +1,44 @@
+{
+  "name": "skiworldrental",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.18",
+    "@fortawesome/free-solid-svg-icons": "^5.8.2",
+    "@fortawesome/react-fontawesome": "^0.1.4",
+    "bootstrap": "^4.3.1",
+    "chart.js": "^1.1.1",
+    "date-fns": "^1.30.1",
+    "i": "^0.3.6",
+    "npm": "^6.9.0",
+    "react": "^16.8.6",
+    "react-chartjs": "^1.2.0",
+    "react-dom": "^16.8.6",
+    "react-router-dom": "^5.0.0",
+    "react-scripts": "2.1.8",
+    "reactstrap": "^8.0.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cacreason/skiWorldRental"
+  },
+  "author": "Christopher Creason",
+  "bugs": {
+    "url": "https://github.com/cacreason/skiWorldRental/issues"
+  }
+}
