@@ -1,9 +1,8 @@
-//Customer Table Component for Ski World Rental Management Platform
+//Table Component for returns/ setups for Ski World Rental Management Platform
 // 5/17/19
 
 import React from 'react';
-import { Container, Row, Col, Table, Button, ButtonGroup, Badge, Form, InputGroup, InputGroupAddon, Input, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import { Table } from 'reactstrap';
 
 export default class ReturnSetupTable extends React.Component {
   constructor(props) {

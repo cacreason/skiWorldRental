@@ -2,7 +2,7 @@
 // 5/17/19
 
 import React from 'react';
-import { Container, Row, Col, Table, Button, ButtonGroup, Badge, Form, InputGroup, InputGroupAddon, Input } from 'reactstrap';
+import { Container, Row, Col, Button, ButtonGroup, Form, InputGroup, InputGroupAddon, Input } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import AdminNav from '../../../components/AdminNav/AdminNav';
 import CustomerTable from '../../../components/CustomerTable/CustomerTable';

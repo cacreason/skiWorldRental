@@ -3,7 +3,6 @@
 
 import React from 'react';
 import { Container, Row, Col, Table, Button, Badge } from 'reactstrap';
-import { Link } from 'react-router-dom';
 import AdminNav from '../../../components/AdminNav/AdminNav';
 import './styles.css';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
@@ -111,7 +110,7 @@ export default class ADashboard extends React.Component {
     	datasetFill : true,
 
     	//String - A legend template
-    	legendTemplate : `"<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"><%if(datasets[i].label){%><%=datasets[i].label%><%}%></span></li><%}%></ul>"`,
+    	legendTemplate : `"<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].strokeColor%>"><%if(datasets[i].label){%><%=datasets[i].label%><%}%></span></li><%}%></ul>"`,
 
 
     	//Boolean - Whether to horizontally center the label and point dot inside the grid
@@ -129,13 +128,13 @@ export default class ADashboard extends React.Component {
       <Col>
         <h3>Saturday May 4, 2019</h3>
         <h5>What's happening today:</h5>
-        <Button className="mx-3" className="returnsLegend">
+        <Button className="mx-3 returnsLegend">
           Returns - <Badge color="secondary">90</Badge>
         </Button>
         <Button className="mx-3" color="danger">
           Late Returns - <Badge color="secondary">6</Badge>
         </Button>
-        <Button className="mx-3" className="setupsLegend">
+        <Button className="mx-3 setupsLegend">
           Setups - <Badge color="secondary">40</Badge>
         </Button>
         <hr/>

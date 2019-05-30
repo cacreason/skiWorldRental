@@ -1,10 +1,8 @@
-//Admin Inventory Page for Ski World Rental Management Platform
+//Pagination Component for Ski World Rental Management Platform
 // 5/7/19
 
 import React from 'react';
-import { Container, Row, Col, Table, Button, ButtonGroup, Badge, Form, InputGroup, InputGroupAddon, Input, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
-import { Link } from 'react-router-dom';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 
 export default class Paginator extends React.Component {
   constructor(props) {
@@ -19,7 +17,6 @@ export default class Paginator extends React.Component {
   }
   createPaginator = () => {
     let pages = [];
-    let activePage = "";
     for (let x=1; x<=this.state.totPages; x++){
       pages.push(
         <PaginationItem active={this.isFirstPage(x)} key={x}>

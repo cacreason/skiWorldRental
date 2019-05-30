@@ -5,7 +5,7 @@
 //
 
 import React from 'react';
-import { Container, Navbar, Nav, NavItem, NavbarBrand, NavbarToggler, Collapse } from 'reactstrap';
+import { Navbar, Nav, NavItem, NavbarBrand, NavbarToggler, Collapse } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 import SWLogo from '../../images/swLogo.png';
 import './styles.css';

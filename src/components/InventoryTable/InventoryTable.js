@@ -2,8 +2,7 @@
 // 5/14/19
 
 import React from 'react';
-import { Container, Row, Col, Table, Button, ButtonGroup, Badge, Form, InputGroup, InputGroupAddon, Input, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import { Table } from 'reactstrap';
 
 export default class InventoryTable extends React.Component {
   constructor(props) {

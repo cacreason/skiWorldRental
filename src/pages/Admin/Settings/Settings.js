@@ -2,8 +2,7 @@
 // 5/7/19
 
 import React from 'react';
-import { Container, Col, Table, Button, Badge } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import { Container } from 'reactstrap';
 import AdminNav from '../../../components/AdminNav/AdminNav';
 import './styles.css';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';

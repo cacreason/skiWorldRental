@@ -14,7 +14,7 @@ export default class Calendar extends React.Component {
     this.state = {
       currentMonth: new Date(),
       selectedDate: new Date(),
-      invData: this.fetchData(new Date()),
+      invData: this.fetchData(this.selectedDate),
       totItems: 1
     };
   }
@@ -161,8 +161,8 @@ export default class Calendar extends React.Component {
           {this.renderHeader()}
           {this.renderDays()}
           {this.renderCells()}
-        </div>
-        <h3 className="mt-3">Saturday, May 4th</h3>
+        </div><hr/>
+        <h3 className="mt-3">{dateFns.format(this.state.selectedDate, "dddd, MMM Do, YYYY")}</h3>
         <Row>
           <Col xs="6" className="my-3">
             <h3>Setups:</h3>
