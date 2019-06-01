@@ -70,10 +70,10 @@ export default class AdminNav extends React.Component {
               </NavLink>
             </NavItem>
             <NavItem>
-              <NavLink to="Admin/Logout">
+              <a href="/Admin/Logout">
                 <span className="mx-auto d-block"><FontAwesomeIcon icon="sign-out-alt" size="lg"/> Sign Out
                 </span>
-              </NavLink>
+              </a>
             </NavItem>
           </Nav>
           </Collapse>

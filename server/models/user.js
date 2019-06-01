@@ -1,5 +1,5 @@
 //Js Document
-// Creason Media Portal
+// Ski World Rental Management User Model
 // User model
 
 var mongoose = require('mongoose');
@@ -11,20 +11,51 @@ var Schema = mongoose.Schema;
 var userSchema = new Schema({
 	username: {
 		type: String,
-		index:true
+		unique:true
 	},
 	password: {
+		type: String
+	},
+	fName: {
+		type: String
+	},
+	lName: {
+		type: String
+	},
+	street: {
+		type: String
+	},
+	aptNum: {
+		type: String
+	},
+	city: {
+		type: String
+	},
+  state: {
+		type: String
+	},
+	zip: {
+		type: String
+	},
+	homePhone: {
+		type: String
+	},
+	mobile: {
 		type: String
 	},
 	email: {
 		type: String
 	},
-	Fname: {
+	altEmail: {
 		type: String
 	},
-	Lname: {
+  type: {
 		type: String
-	}
+	},
+	birthday: {
+		type: String
+	},
+	activity: [ String ]
 });
 
 var User = module.exports = mongoose.model('users', userSchema);

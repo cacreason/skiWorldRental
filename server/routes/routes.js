@@ -25,7 +25,7 @@ router.get('/', function (req, res) {
   //res.sendFile(path.resolve('build/index.html'));
 });
 
-router.get('/admin',  function (req, res) {
+router.get('/admin',  checkAuth, function (req, res) {
   res.sendFile(path.join(__dirname, '../../build', 'index.html'));
 });
 
@@ -33,19 +33,19 @@ router.get('/admin/login', function (req, res) {
   res.sendFile(path.join(__dirname, '../../build', 'index.html'));
 });
 
-router.get('/admin/inventory', function (req, res) {
+router.get('/admin/inventory', checkAuth, function (req, res) {
   res.sendFile(path.join(__dirname, '../../build', 'index.html'));
 });
 
-router.get('/admin/users', function (req, res) {
+router.get('/admin/users', checkAuth, function (req, res) {
   res.sendFile(path.join(__dirname, '../../build', 'index.html'));
 });
 
-router.get('/admin/reservations', function (req, res) {
+router.get('/admin/reservations', checkAuth, function (req, res) {
   res.sendFile(path.join(__dirname, '../../build', 'index.html'));
 });
 
-router.get('/admin/settings', function (req, res) {
+router.get('/admin/settings', checkAuth, function (req, res) {
   res.sendFile(path.join(__dirname, '../../build', 'index.html'));
 });
 

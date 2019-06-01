@@ -6,15 +6,18 @@ import { Container, Card, CardHeader, CardFooter, CardBody, Col, Form, FormGroup
 import { Link } from 'react-router-dom';
 import SWLogo from '../../../images/swLogo.png';
 import './styles.css';
+const axios = require('axios');
 
 export default class ALogin extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleResponse = this.handleResponse.bind(this);
     this.state = {
       email: "",
-      password: ""
+      password: "",
+      response: " "
     };
   }
 
@@ -24,9 +27,7 @@ export default class ALogin extends React.Component {
       password: this.state.password
     }
     event.preventDefault();
-    this.callApi(formData)
-    .then(res => this.setState({ response: res.express }))
-    .catch(err => console.log(err));
+    this.callApi(formData);
   }
 
   handleInputChange(event) {
@@ -39,21 +40,21 @@ export default class ALogin extends React.Component {
     });
   }
 
+  handleResponse(data) {
+    this.setState({response: data});
+  }
+
   callApi = async (data) => {
-    const response = await fetch('/login', {
-      method: 'POST',
-      headers: {
-            "Content-Type": "application/json; charset=utf-8",
-            // "Content-Type": "application/x-www-form-urlencoded",
-        },
-      body: JSON.stringify(data)
+    axios.post('/admin/login', data)
+    .then((response) => {
+      console.log(response);
+      this.handleResponse(response.data.message);
+      this.props.history.push("/admin/");
+    })
+    .catch((error) => {
+      console.log(error);
+      this.handleResponse("Invalid Username or Password.");
     });
-    console.log(data);
-    const body = await response.json();
-
-    if (response.status !== 200) throw Error(body.message);
-
-    return body;
   };
 
   render() {
@@ -75,8 +76,9 @@ export default class ALogin extends React.Component {
             <Label for="password">Password</Label>
             <Input type="password" name="password" id="password" placeholder="Password" value={this.state.password} onChange={this.handleInputChange} required/>
           </FormGroup>
-          <Link to='/admin'><Button className="w-100" color="success">Submit</Button></Link>
+          <Button type="submit" className="w-100" color="success">Submit</Button>
           </Form>
+          <div><p className="text-danger mt-3">{this.state.response}</p></div>
         </CardBody>
         <CardFooter>Not an Employee? <Link to="/">Customer Login</Link></CardFooter>
       </Card>
