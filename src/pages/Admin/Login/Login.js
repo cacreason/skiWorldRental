@@ -49,7 +49,9 @@ export default class ALogin extends React.Component {
     .then((response) => {
       console.log(response);
       this.handleResponse(response.data.message);
-      this.props.history.push("/admin/");
+      if (response.status === 200){
+        this.props.history.push("/admin/");
+      }
     })
     .catch((error) => {
       console.log(error);

@@ -53,8 +53,9 @@ app.use(expressValidator({
 // Express Session
 app.use(session({
     secret: process.env.SESSION_SECRET,
-    saveUninitialized: true,
-    resave: true
+    saveUninitialized: false,
+    httpOnly: true,
+    resave: false
 }));
 
 app.use(passport.initialize());
