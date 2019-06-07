@@ -53,8 +53,7 @@ app.use(expressValidator({
 // Express Session
 app.use(session({
     secret: process.env.SESSION_SECRET,
-    saveUninitialized: false,
-    httpOnly: true,
+    saveUninitialized: true,
     resave: false
 }));
 

@@ -20,6 +20,10 @@ function checkAuth(req,res,next){
     }
 }
 
+router.get("/admin/checkauth", checkAuth, function(req, res, next) {
+    res.sendStatus(200);
+});
+
 router.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, '../../build', 'index.html'));
   //res.sendFile(path.resolve('build/index.html'));
