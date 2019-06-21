@@ -63,7 +63,7 @@ export default class NewItem extends React.Component {
   validateUserInput(input){
     let formData = input;
     let str = "";
-    const regex = /[^a-z0-9/-:|',.]/gi;//Match when string value is NOT of the following values a-z 0-9 / - : | ' , .
+    const regex = /[^a-z0-9/-:|', .]/gi;//Match when string value is NOT of the following values a-z 0-9 / - : | ' , .
     const keys = Object.keys(input);//Create array of object keys. [description, category, price, brand, color, size]
     const values = Object.values(input);//Create array of object values. ex. [Burton Cruzer, Snowboard, 31.95, Burton, Red, 155]
     let isSpecChar = false;
@@ -71,8 +71,8 @@ export default class NewItem extends React.Component {
       str = values[i];
       //If object key is equal to color or size then send that array to validateArray, and store value under the corresponding formData property.
       if(keys[i] === "color" || keys[i] === "size"){
-        var newArray = formData[keys[i]];
-        for (var j=0; j<newArray.length-1; j++){
+        let newArray = formData[keys[i]];
+        for (var j=0; j<newArray.length; j++){
           if (newArray[j].match(regex)){
             this.setState({isValid: false, response: "Item information cannot contain special characters."});
             isSpecChar = true;
@@ -82,7 +82,7 @@ export default class NewItem extends React.Component {
             newArray.splice(j,1);
           }
         }
-        formData[keys[i]] = newArray;//this.validateArray(formData[keys[i]], regex);
+        formData[keys[i]] = newArray;
         if (isSpecChar === true ){break;}
       }
       else if (str.match(regex)){
@@ -96,24 +96,11 @@ export default class NewItem extends React.Component {
     return formData;
   }
 
-  validateArray(array, regex){
-    var newArray = array;
-    for (var i=1; i<array.length; i++){
-      if (array[i].match(regex)){
-        this.setState({isValid: false, response: "Item information cannot contain special characters."});
-        return ;
-      }
-      if (array[i] === ""){
-        newArray.splice(i,1);
-      }
-    }
-    return newArray;
-  }
-
 //Call input validator that converts object to array.  If user input fields contain special characters, set isValid to false and display message to user.
   async handleSubmit(event) {
     event.preventDefault();
-    let formData = await this.validateUserInput(this.state.formData);
+    const cloneData = JSON.parse(JSON.stringify(this.state.formData));  //Create deep copy of formData as to not mutate state on submit when empty array element is removed.
+    const formData = await this.validateUserInput(cloneData);
     console.log(formData);
     if ((this.state.isValid === true) && formData.description !== "" && formData.category !== "" && formData.price !== "" && formData.brand !== ""){
       if(formData.color[0] !== "" || formData.size[0] !== ""){
