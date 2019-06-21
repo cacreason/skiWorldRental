@@ -45,7 +45,7 @@ export default class ALogin extends React.Component {
   }
 
   callApi = async (data) => {
-    axios.post('/admin/login', data)
+    axios.post("/admin/login", data)
     .then((response) => {
       console.log(response);
       this.handleResponse(response.data.message);

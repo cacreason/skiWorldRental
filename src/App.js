@@ -5,6 +5,7 @@ import checkAuth from './components/CheckAuth/checkAuth';
 import AdminLogin from './pages/Admin/Login/Login';
 import AdminDashboard from './pages/Admin/Dashboard/Dashboard';
 import AdminInv from './pages/Admin/Inventory/Inventory';
+import NewItem from './pages/Admin/NewItem/NewItem';
 import AdminUsers from './pages/Admin/Users/Users';
 import AdminReserv from './pages/Admin/Reservations/Reservations';
 import AdminSettings from './pages/Admin/Settings/Settings';
@@ -23,6 +24,7 @@ class App extends Component {
         <Route exact path="/admin" component={checkAuth(AdminDashboard)}/>
         <Route exact path="/admin/login" component={AdminLogin}/>
         <Route exact path="/admin/inventory" component={checkAuth(AdminInv)}/>
+        <Route exact path="/admin/inventory/newitem" component={NewItem}/>
         <Route exact path="/admin/users" component={checkAuth(AdminUsers)}/>
         <Route exact path="/admin/reservations" component={checkAuth(AdminReserv)}/>
         <Route exact path="/admin/settings" component={checkAuth(AdminSettings)}/>

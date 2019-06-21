@@ -53,10 +53,6 @@ router.get('/admin/settings', checkAuth, function (req, res) {
   res.sendFile(path.join(__dirname, '../../build', 'index.html'));
 });
 
-router.get('/logout', function (req, res) {
-  res.sendFile(path.join(__dirname, '../../build', 'index.html'));
-});
-
 router.post('/contact', function (req, res) {
   console.log(req.body);
   var name = req.body.name;

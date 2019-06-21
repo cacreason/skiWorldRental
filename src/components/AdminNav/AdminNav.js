@@ -33,7 +33,7 @@ export default class AdminNav extends React.Component {
       <div className="AdminNav" id="AdminNav">
       <Navbar color="light" light fixed="top">
           <NavbarToggler onClick={this.toggle} />
-          <h5 className="px-3">{this.props.breadcrumb} /</h5>
+          <h5 className="px-3">{this.props.breadcrumb}</h5>
       </Navbar>
           <Collapse className="bg-light  position-fixed" isOpen={this.state.isOpen} exit={false} navbar>
           <Nav className="mr-auto flex-column" navbar>

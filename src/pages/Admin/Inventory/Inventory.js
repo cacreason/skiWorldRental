@@ -93,7 +93,7 @@ export default class AdminInventory extends React.Component {
       </Form>
       </Col>
       <Col className="my-auto d-flex justify-content-end">
-        <Link to="/">
+        <Link to="/admin/inventory/newitem">
           <Button outline color="success" size="" className="mx-1"><span className="mx-auto"><FontAwesomeIcon icon="plus" size="lg"/></span> New Item</Button>
         </Link>
       </Col>
