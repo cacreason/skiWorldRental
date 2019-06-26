@@ -5,6 +5,7 @@
 var express = require('express');
 var routes = require(__dirname + '/server/routes/routes');
 var users = require(__dirname + '/server/routes/users');
+var items = require(__dirname + '/server/routes/inventory');
 require('dotenv').config();
 var router = express.Router();
 var passport = require('passport')

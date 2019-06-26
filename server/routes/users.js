@@ -1,6 +1,6 @@
 ﻿// JavaScript Document
-// Creason Media Portfolio User
-// 5/26/17
+// Ski World Rental User Routes
+// 5/26/19
 
 var express = require('express');
 var expressValidator = require('express-validator');
