@@ -63,6 +63,7 @@ app.use(passport.session());
 
 app.use('/', routes);
 app.use('/', users);
+app.use('/', items);
 //  Start static file server
 app.use(express.static(path.join(__dirname, 'build')));
 

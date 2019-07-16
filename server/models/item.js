@@ -3,85 +3,70 @@
 // User model
 
 var mongoose = require('mongoose');
-var bcrypt = require('bcryptjs');
-
 var Schema = mongoose.Schema;
 
-// Item Schema
+// Item Schema - Parent
 var itemSchema = new Schema({
-	username: {
+	description: {
 		type: String,
 		unique:true
 	},
-	password: {
+	brand: {
 		type: String
 	},
-	fName: {
+	category: {
 		type: String
 	},
-	lName: {
+	price: {
 		type: String
 	},
-	street: {
-		type: String
-	},
-	aptNum: {
-		type: String
-	},
-	city: {
-		type: String
-	},
-  state: {
-		type: String
-	},
-	zip: {
-		type: String
-	},
-	homePhone: {
-		type: String
-	},
-	mobile: {
-		type: String
-	},
-	email: {
-		type: String
-	},
-	altEmail: {
-		type: String
-	},
-  type: {
-		type: String
-	},
-	birthday: {
-		type: String
-	},
-	activity: [ String ]
+	children: {
+		type: Array
+	}
 });
 
-var Item = module.exports = mongoose.model('items', itemSchema);
+//Item Schema - Child
+var childItemSchema = new Schema({
+	parent: {
+		type: String
+	},
+	description: {
+		type: String
+	},
+	color: {
+		type: String
+	},
+	size: {
+		type: String
+	},
+	qty: {
+		type: Number
+	},
+	sku: {
+		type: String
+	},
+	altSku: {
+		type: String
+	}
+});
+
+var Item = module.exports.item = mongoose.model('items', itemSchema);
+var ChildItem = module.exports.childitem = mongoose.model('childitems', childItemSchema);
 
 
-module.exports.createUser = function(newUser, callback){
-	bcrypt.genSalt(10, function(err, salt) {
-	    bcrypt.hash(newUser.password, salt, function(err, hash) {
-	        newUser.password = hash;
-	        newUser.save(callback);
-	    });
-	});
+module.exports.createItem = function(newItem, callback){
+	newItem.save(callback);
 }
 
-module.exports.getUserByUsername = function(username, callback){
-	var query = {username: username};
-	User.findOne(query, callback);
+module.exports.createChildItem = function(newChildItem, callback){
+	newChildItem.save(callback);
 }
 
-module.exports.getUserById = function(id, callback){
-	User.findById(id, callback);
+module.exports.findItemAndUpdate = function(id, update, callback){
+	Item.findByIdAndUpdate(id, update, callback);
 }
 
-module.exports.comparePassword = function(candidatePassword, hash, callback){
-	bcrypt.compare(candidatePassword, hash, function(err, isMatch) {
-    	if(err) throw err;
-    	callback(null, isMatch);
-	});
+module.exports.getItemByDescription = function(description, callback){
+	var query = {description: description};
+	Item.findOne(query, callback);
 }

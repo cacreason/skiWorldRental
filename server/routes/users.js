@@ -14,7 +14,7 @@ passport.use(new LocalStrategy(
    User.getUserByUsername(username, function(err, user){
    	if(err) {return done(err); }
    	if(!user) {
-      console.log('invalid user');
+      console.log('Invalid user');
    		return  done(null, false);
    	}
    	User.comparePassword(password, user.password, function(err, isMatch){
@@ -50,7 +50,7 @@ router.post('/admin/login', function(req, res, next) {
     }
     req.logIn(user, function(err) {
       if (err) { return next(err); }
-      console.log("success user " + user.username + " authenticated" );
+      console.log("\x1b[32m", "User " + user.username + " successfully authenticated");
       res.redirect('/admin/');
     });
   })(req, res, next);
@@ -120,7 +120,7 @@ router.post('/admin/register', function(req, res){
 			else{
 				res.status(400);
 				res.send({express: "Username already exists"});
-				console.log('username already taken');
+				console.log('Username already taken');
 			}
 		});
 

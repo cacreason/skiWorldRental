@@ -24,8 +24,10 @@ export default class NewItem extends React.Component {
         category: "Ski",
         price: "",
         brand: "",
-        color: [""],
-        size: [""]
+        matrix: [{
+          color: "",
+          size: ""
+        }]
       }
     };
   }
@@ -45,16 +47,16 @@ export default class NewItem extends React.Component {
 //Creates additional input field if last input field is used and deletes
 //array element if text in input field is cleared.
   handleArrayChange(event, arrayName, index){
-    let newArray = this.state.formData[arrayName];
+    let newArray = this.state.formData.matrix;
     let formData = this.state.formData;
-    newArray[index]=event.target.value;
-    if(newArray[newArray.length-1] !== ""){
-      newArray.push("");
+    newArray[index][arrayName]=event.target.value;
+    if(newArray[newArray.length-1].color !== "" || newArray[newArray.length-1].size !== ""){
+      newArray.push({color:"", size:""});
     }
-    else if(newArray[index] === ""){
+    else if(newArray[index].color === "" && newArray[index].size === ""){
       newArray.splice(index, 1);
     }
-    formData[arrayName] = newArray;
+    formData.matrix = newArray;
     this.setState({
       formData: formData
     });
@@ -69,16 +71,16 @@ export default class NewItem extends React.Component {
     let isSpecChar = false;
     for(let i = 0; i < keys.length; i++){
       str = values[i];
-      //If object key is equal to color or size then send that array to validateArray, and store value under the corresponding formData property.
-      if(keys[i] === "color" || keys[i] === "size"){
+      //If object key is equal to 'matrix' then validate matrix array(color or size must not match regex) and delete trailing empty object.
+      if(keys[i] === "matrix"){
         let newArray = formData[keys[i]];
         for (var j=0; j<newArray.length; j++){
-          if (newArray[j].match(regex)){
+          if (newArray[j].color.match(regex) || newArray[j].size.match(regex)){
             this.setState({isValid: false, response: "Item information cannot contain special characters."});
             isSpecChar = true;
             break;
           }
-          if (newArray[j] === ""){
+          if (newArray[j].color === "" && newArray[j].size === ""){
             newArray.splice(j,1);
           }
         }
@@ -103,28 +105,37 @@ export default class NewItem extends React.Component {
     const formData = await this.validateUserInput(cloneData);
     console.log(formData);
     if ((this.state.isValid === true) && formData.description !== "" && formData.category !== "" && formData.price !== "" && formData.brand !== ""){
-      if(formData.color[0] !== "" || formData.size[0] !== ""){
-        this.callApi(JSON.stringify(formData));
+      if(formData.matrix[0].color !== "" || formData.matrix[0].size !== ""){
+        this.callApi(formData);
         this.setState({isLoading: true});
       }
       else{
-        this.setState({isValid: false, response: "Error - Please Provide Color or Size"});
+        this.setState({isValid: false, response: "Error - Please Provide Item Color or Size"});
       }
     }
   }
 
-  callApi(data){
-    axios.post("/admin/inventory/newitem", data)
+  callApi = async (data) => {
+    axios.post("/admin/inventory/newitem", data, {
+      headers: {
+          'Content-Type': 'application/json'
+      }
+    })
     .then((response) => {
       console.log(response);
       if (response.status === 200){
         this.setState({isValid: true, isLoading: false, response: "Success - Item Created"})
-        this.props.history.push("/admin/inventory/?description=" + encodeURIComponent(this.state.description));
+        this.props.history.push("/admin/inventory/?description=" + encodeURIComponent(this.state.formData.description));
       }
     })
     .catch((error) => {
-      console.log(error);
-      this.setState({isLoading: false, isValid: false, response: "System Error - Item not created"});
+      if (error.status === 409){
+        this.setState({isLoading: false, isValid: false, response: "System Error - Item Description Already Exists"});
+      }
+      else{
+        console.log(error);
+        this.setState({isLoading: false, isValid: false, response: "System Error - Item not created"});
+      }
     });
     console.log(data);
   }
@@ -189,19 +200,21 @@ export default class NewItem extends React.Component {
         </Row> <hr/>
         <h4>Item Matrix Information:</h4>
         <Row>
-        <Col sm={6}>
-        <h5>Color:</h5>
-          {(this.state.formData.color || []).map((item, index) => (
-            <Input key={index} value={this.state.formData.color[index]} name={"color" + index} onChange={(event)=>{this.handleArrayChange(event, "color", index)}} placeholder="Color"/>
-          ))}
-        </Col>
-        <Col sm={6}>
-        <h5>Size:</h5>
-          {(this.state.formData.size || []).map((item, index) => (
-            <Input key={index} value={this.state.formData.size[index]} name={"size" + index} onChange={(event)=>{this.handleArrayChange(event, "size", index)}} placeholder="Size"/>
-          ))}
-        </Col>
+        <div className="d-inline-flex px-2"><h5>#</h5></div>
+        <Col xs={5}><h5>Color</h5></Col>
+        <Col xs={5}><h5>Size</h5></Col>
         </Row>
+        {(this.state.formData.matrix || []).map((item, index) => (
+          <Row key={index}>
+            <div className="d-inline-flex px-2 my-auto">{index+1}</div>
+            <Col sm={5}>
+              <Input key={"color" + index} value={this.state.formData.matrix[index].color} name={"color" + index} onChange={(event)=>{this.handleArrayChange(event, "color", index)}} placeholder="Color"/>
+            </Col>
+            <Col sm={5}>
+              <Input key={"size" + index} value={this.state.formData.matrix[index].size} name={"size" + index} onChange={(event)=>{this.handleArrayChange(event, "size", index)}} placeholder="Size"/>
+            </Col>
+          </Row>
+        ))}
       </Form>
 
       </Container>

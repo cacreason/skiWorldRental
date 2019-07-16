@@ -41,6 +41,10 @@ router.get('/admin/inventory', checkAuth, function (req, res) {
   res.sendFile(path.join(__dirname, '../../build', 'index.html'));
 });
 
+router.get('/admin/inventory/newitem', checkAuth, function (req, res) {
+  res.sendFile(path.join(__dirname, '../../build', 'index.html'));
+});
+
 router.get('/admin/users', checkAuth, function (req, res) {
   res.sendFile(path.join(__dirname, '../../build', 'index.html'));
 });
