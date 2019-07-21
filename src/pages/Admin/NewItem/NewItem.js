@@ -125,11 +125,11 @@ export default class NewItem extends React.Component {
       console.log(response);
       if (response.status === 200){
         this.setState({isValid: true, isLoading: false, response: "Success - Item Created"})
-        this.props.history.push("/admin/inventory/?description=" + encodeURIComponent(this.state.formData.description));
+        this.props.history.push("/admin/inventory/?search=" + encodeURIComponent(this.state.formData.description));
       }
     })
     .catch((error) => {
-      if (error.status === 409){
+      if (error.response.status === 409){
         this.setState({isLoading: false, isValid: false, response: "System Error - Item Description Already Exists"});
       }
       else{

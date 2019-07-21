@@ -30,22 +30,22 @@ export default class InventoryTable extends React.Component {
     }
     let minItems = this.state.itemsPerPage * (currentPage - isFirstPage);
     let maxItems = this.state.itemsPerPage * currentPage;
-    for(var y=minItems; y < returnedJSON.childItems.length; y++){
+    for(var y=minItems; y < returnedJSON.length; y++){
       if(y < maxItems){
         console.log(minItems, maxItems, currentPage);
         children = [];
         for(var x=0; x < 6; x++){
           if (x === 0){
-            value = returnedJSON.childItems[y].description;
+            value = returnedJSON[y].description;
           }
           else if( x===1){
-            value = returnedJSON.childItems[y].qty;
+            value = returnedJSON[y].qty;
           }
           else if( x===2){
-            value = returnedJSON.childItems[y].sku;
+            value = returnedJSON[y].sku;
           }
           else if( x===3){
-            value = returnedJSON.childItems[y].altSku;
+            value = returnedJSON[y].altSku;
           }
           else if( x===4){
             value = returnedJSON.price;

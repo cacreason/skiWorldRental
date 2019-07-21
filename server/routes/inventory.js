@@ -9,6 +9,17 @@ var passport = require('passport')
 var router = express.Router();
 var Item = require('../models/item');
 
+router.post('/admin/inventory/search', function(req, res){
+  const query = req.body.search? req.body.search : "";
+  const sanitizedQuery = query.replace(/[-\/\\^$*+?.()|[\]{}]/g, '');
+  console.log(sanitizedQuery);
+  Item.getChildItemByDescription(sanitizedQuery, function(err, item){
+    if(err) throw err;
+    console.log("Item Search: " + item);
+    res.json(item);
+  });
+});
+
 router.post('/admin/inventory/newitem', function(req, res){
   let item = {
 	  description: req.body.description,
@@ -51,6 +62,7 @@ router.post('/admin/inventory/newitem', function(req, res){
 			if(err) throw err;
 			if(!item){
 				Item.createItem(newItem, function(err, item){
+          if(err) throw err;
           console.log("log:43" + item);
           for(let i=0; i<childItems.length; i++){
             childItems[i].parent = newItem._id;
@@ -64,7 +76,6 @@ router.post('/admin/inventory/newitem', function(req, res){
               console.log("\x1b[32m", "Child-Item Successfully Created: \n" + item);
             });
           }
-					if(err) throw err;
 					console.log("\x1b[32m", "Item Successfully Created: \n" + item);
 					res.send({express: "Item Successfully Created"});
 				});

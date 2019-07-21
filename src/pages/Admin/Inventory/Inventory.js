@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 import AdminNav from '../../../components/AdminNav/AdminNav';
 import InventoryTable from '../../../components/InventoryTable/InventoryTable';
 import Pagination from '../../../components/Pagination/Pagination';
+import axios from 'axios';
+import queryString from 'query-string';
 import './styles.css';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
@@ -38,40 +40,29 @@ export default class AdminInventory extends React.Component {
     console.log('page' + page);
   }
   fetchItemData(){
-    let returnedJSON = {
-      "sysID": "123456789012", "brand": "Burton", "description": "LTR", "category": "Snowboard", "price": "20",
-      "childItems": [
-        {"color": "Blue", "size": "145", "soleLength": "NA", "qty": "5", "sku": "", "altSku": "", "description": "Burton LTR 145"},
-        {"color": "Red", "size": "155", "soleLength": "NA", "qty": "6", "sku": "", "altSku": "", "description": "Burton LTR 155"},
-        {"color": "Purple", "size": "155w", "soleLength": "NA", "qty": "7", "sku": "", "altSku": "", "description": "Burton LTR 155w"},
-        {"color": "Purple", "size": "155w", "soleLength": "NA", "qty": "7", "sku": "", "altSku": "", "description": "Burton LTR 155w"},
-        {"color": "Purple", "size": "155w", "soleLength": "NA", "qty": "7", "sku": "", "altSku": "", "description": "Burton LTR 155w"},
-        {"color": "Purple", "size": "155w", "soleLength": "NA", "qty": "7", "sku": "", "altSku": "", "description": "Burton LTR 155w"},
-        {"color": "Purple", "size": "155w", "soleLength": "NA", "qty": "7", "sku": "", "altSku": "", "description": "Burton LTR 155w"},
-        {"color": "Purple", "size": "155w", "soleLength": "NA", "qty": "7", "sku": "", "altSku": "", "description": "Burton LTR 155w"},
-        {"color": "Purple", "size": "155w", "soleLength": "NA", "qty": "7", "sku": "", "altSku": "", "description": "Burton LTR 155w"},
-        {"color": "Purple", "size": "155w", "soleLength": "NA", "qty": "7", "sku": "", "altSku": "", "description": "Burton LTR 155w"},
-        {"color": "Purple", "size": "155w", "soleLength": "NA", "qty": "7", "sku": "", "altSku": "", "description": "Burton LTR 155w"},
-        {"color": "Purple", "size": "155w", "soleLength": "NA", "qty": "7", "sku": "", "altSku": "", "description": "Burton LTR 155w"},
-        {"color": "Purple", "size": "155w", "soleLength": "NA", "qty": "7", "sku": "", "altSku": "", "description": "Burton LTR 155w"},
-        {"color": "Purple", "size": "155w", "soleLength": "NA", "qty": "7", "sku": "", "altSku": "", "description": "Burton LTR 155w"},
-        {"color": "Blue", "size": "145", "soleLength": "NA", "qty": "5", "sku": "", "altSku": "", "description": "Burton LTR 145"},
-        {"color": "Red", "size": "155", "soleLength": "NA", "qty": "6", "sku": "", "altSku": "", "description": "Burton LTR 155"},
-        {"color": "Purple", "size": "155w", "soleLength": "NA", "qty": "7", "sku": "", "altSku": "", "description": "Burton LTR 155w"},
-        {"color": "Purple", "size": "155w", "soleLength": "NA", "qty": "7", "sku": "", "altSku": "", "description": "Burton LTR 155w"},
-        {"color": "Purple", "size": "155w", "soleLength": "NA", "qty": "7", "sku": "", "altSku": "", "description": "Burton LTR 155w"},
-        {"color": "Purple", "size": "155w", "soleLength": "NA", "qty": "7", "sku": "", "altSku": "", "description": "Burton LTR 155w"},
-        {"color": "Purple", "size": "155w", "soleLength": "NA", "qty": "7", "sku": "", "altSku": "", "description": "Burton LTR 155w"},
-        {"color": "Purple", "size": "155w", "soleLength": "NA", "qty": "7", "sku": "", "altSku": "", "description": "Burton LTR 155w"},
-        {"color": "Purple", "size": "155w", "soleLength": "NA", "qty": "7", "sku": "", "altSku": "", "description": "Burton LTR 155w"},
-        {"color": "Purple", "size": "155w", "soleLength": "NA", "qty": "7", "sku": "", "altSku": "", "description": "Burton LTR 155w"},
-        {"color": "Purple", "size": "155w", "soleLength": "NA", "qty": "7", "sku": "", "altSku": "", "description": "Burton LTR 155w"},
-        {"color": "Purple", "size": "155w", "soleLength": "NA", "qty": "7", "sku": "", "altSku": "", "description": "Burton LTR 155w"},
-        {"color": "Purple", "size": "155w", "soleLength": "NA", "qty": "7", "sku": "", "altSku": "", "description": "Burton LTR 155w"},
-        {"color": "Purple", "size": "155w", "soleLength": "NA", "qty": "7", "sku": "", "altSku": "", "description": "Burton LTR 155w"},
-      ]
-    }
-    return returnedJSON;
+    const query = queryString.parse(this.props.location.search);
+    const params = new URLSearchParams(query);
+    const search = params.get('search');
+    axios.post("/admin/inventory/search", {"search" : search}, {
+      headers: {
+          'Content-Type': 'application/json'
+      }
+    })
+    .then((response) => {
+      console.log(response);
+      if (response.status === 200){
+        this.setState({data: response.data});
+        }
+    })
+    .catch((error) => {
+      if (error){
+        console.log(error);
+      }
+    });
+  }
+
+  componentDidMount(){
+    this.fetchItemData();
   }
 
   render() {
@@ -100,7 +91,7 @@ export default class AdminInventory extends React.Component {
       </Row>
       <Row>
       <Col className="d-flex justify-content-start">
-        <Pagination updatePage={this.updateTable} currentPage={this.state.currentPage} totItems={this.state.data.childItems.length} itemsPerPage={this.state.itemsPerPage}/>
+        <Pagination updatePage={this.updateTable} currentPage={this.state.currentPage} totItems={this.state.data?this.state.data.length:0} itemsPerPage={this.state.itemsPerPage}/>
       </Col>
       <Col className="d-flex justify-content-end">
       <ButtonGroup size="sm">
@@ -114,11 +105,11 @@ export default class AdminInventory extends React.Component {
       </Col>
       </Row>
       <Row>
-        <InventoryTable currentPage={this.state.currentPage} data={this.state.data}/>
+        <InventoryTable currentPage={this.state.currentPage} data={this.state.data?this.state.data:""}/>
       </Row>
       <Row>
         <Col className="d-flex justify-content-start">
-          <Pagination updatePage={this.updateTable} currentPage={this.state.currentPage} totItems={this.state.data.childItems.length} itemsPerPage={this.state.itemsPerPage}/>
+          <Pagination updatePage={this.updateTable} currentPage={this.state.currentPage} totItems={this.state.data?this.state.data.length:0} itemsPerPage={this.state.itemsPerPage}/>
         </Col>
       </Row>
       </Container>

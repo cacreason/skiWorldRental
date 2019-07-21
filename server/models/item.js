@@ -9,46 +9,59 @@ var Schema = mongoose.Schema;
 var itemSchema = new Schema({
 	description: {
 		type: String,
-		unique:true
+		unique: true,
+		required: true
 	},
 	brand: {
-		type: String
+		type: String,
+		sparse: true
 	},
 	category: {
-		type: String
+		type: String,
+		sparse: true
 	},
 	price: {
-		type: String
+		type: String,
+		sparse: true
 	},
 	children: {
-		type: Array
+		type: Array,
+		sparse: true
 	}
-});
+}, {autoIndex: false});
 
 //Item Schema - Child
 var childItemSchema = new Schema({
 	parent: {
-		type: String
+		type: String,
+		required: true
 	},
 	description: {
-		type: String
+		type: String,
+		unique: true,
+		required: true
 	},
 	color: {
-		type: String
+		type: String,
+		sparse: true
 	},
 	size: {
-		type: String
+		type: String,
+		sparse: true
 	},
 	qty: {
-		type: Number
+		type: Number,
+		sparse: true
 	},
 	sku: {
-		type: String
+		type: String,
+		sparse: true
 	},
 	altSku: {
-		type: String
+		type: String,
+		sparse: true
 	}
-});
+}, {autoIndex: false});
 
 var Item = module.exports.item = mongoose.model('items', itemSchema);
 var ChildItem = module.exports.childitem = mongoose.model('childitems', childItemSchema);
@@ -68,5 +81,13 @@ module.exports.findItemAndUpdate = function(id, update, callback){
 
 module.exports.getItemByDescription = function(description, callback){
 	var query = {description: description};
+	console.log(query);
 	Item.findOne(query, callback);
+}
+
+module.exports.getChildItemByDescription = function(description, callback){
+	let regex = new RegExp(description, 'gi');
+	var query = {description: regex};
+	console.log(query);
+	ChildItem.find(query, callback);
 }
