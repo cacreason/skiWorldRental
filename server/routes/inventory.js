@@ -37,8 +37,10 @@ router.post('/admin/inventory/newitem', function(req, res){
       qty: 0,
       sku: '',
       altsku: '',
-      description: item.description + " " + item.matrix[i].color + " " + item.matrix[i].size
-    })
+      description: item.description + " " + item.matrix[i].color + " " + item.matrix[i].size,
+      category: item.category,
+      price: item.price
+    });
   }
 
 	// Validation

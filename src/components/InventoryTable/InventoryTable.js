@@ -48,10 +48,10 @@ export default class InventoryTable extends React.Component {
             value = returnedJSON[y].altSku;
           }
           else if( x===4){
-            value = returnedJSON.price;
+            value = returnedJSON[y].price;
           }
           else if( x===5){
-            value = returnedJSON.category;
+            value = returnedJSON[y].category;
           }
           children.push(<td key={key.toString()}>{value}</td>);
           key++
@@ -59,7 +59,7 @@ export default class InventoryTable extends React.Component {
       table.push(<tr key={key.toString()}>{children}</tr>)
     }
     }
-    console.log(this.props.currentPage);
+    console.log(returnedJSON);
     return table;
   }
 

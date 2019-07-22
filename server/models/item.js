@@ -21,7 +21,7 @@ var itemSchema = new Schema({
 		sparse: true
 	},
 	price: {
-		type: String,
+		type: Number,
 		sparse: true
 	},
 	children: {
@@ -59,6 +59,14 @@ var childItemSchema = new Schema({
 	},
 	altSku: {
 		type: String,
+		sparse: true
+	},
+	category: {
+		type: String,
+		sparse: true
+	},
+	price: {
+		type: Number,
 		sparse: true
 	}
 }, {autoIndex: false});
