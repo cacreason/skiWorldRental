@@ -3,6 +3,7 @@
 
 import React from 'react';
 import { Table } from 'reactstrap';
+import {Link} from 'react-router-dom';
 
 export default class InventoryTable extends React.Component {
   constructor(props) {
@@ -36,7 +37,7 @@ export default class InventoryTable extends React.Component {
         children = [];
         for(var x=0; x < 6; x++){
           if (x === 0){
-            value = returnedJSON[y].description;
+            value = <Link to={{pathname : '/Admin/Inventory/Items', state:{returnedJSON : returnedJSON[y].parent}}}>{returnedJSON[y].description}</Link>;
           }
           else if( x===1){
             value = returnedJSON[y].qty;
@@ -65,7 +66,7 @@ export default class InventoryTable extends React.Component {
 
   render() {
     return (
-        <Table>
+        <Table striped>
           <thead>
             <tr>
               <th>Item</th>

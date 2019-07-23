@@ -1,15 +1,14 @@
-//Admin New Item Page for Ski World Rental Management Platform
-// 6/7/19
-//New Item submits post request to /admin/createParent and if a 200 response(unique item description and valid data) is received user is redirected to inventory page.
-//Upon receipt parent item is added to parent item mongoDB collection and child items are added to child items collections based upon color / size matrices.
+//Admin Update Item Page for Ski World Rental Management Platform
+// 7/22/19
+//Post request is submitted to admin/updateItem and upon receipt parent/child mongo documents are updated.
 
 import React from 'react';
-import { Container, Row, Col, Button, Form, FormGroup, Label, Input, Spinner, Table } from 'reactstrap';
+import { Container, Row, Col, Button, Form, FormGroup, Label, Input, Spinner } from 'reactstrap';
 import axios from 'axios';
 import AdminNav from '../../../components/AdminNav/AdminNav';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
-export default class NewItem extends React.Component {
+export default class Item extends React.Component {
   constructor(props) {
     super(props);
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -19,7 +18,10 @@ export default class NewItem extends React.Component {
       isValid: Boolean,
       isLoading: false,
       response: "",
+      parentData: {},
+      childData: [],
       formData: {
+        parentID: this.props.location.state.returnedJSON,
         description: "",
         category: "Ski",
         price: "",
@@ -29,7 +31,7 @@ export default class NewItem extends React.Component {
           size: "",
           sku: "",
           altSku: "",
-          qty: ""
+          qty: 0
         }]
       }
     };
@@ -152,6 +154,29 @@ export default class NewItem extends React.Component {
       }
     }
 
+  getItemData = (parentID) => {
+    axios.post("/admin/inventory/updateitem", parentID, {
+      headers: {
+          'Content-Type': 'application/json'
+      }
+    })
+    .then((response) => {
+      console.log(response);
+      if (response.status === 200){
+        this.setState({parentData: response.parentData, childData: response.childData});
+      }
+    })
+    .catch((error) => {
+      if (error.response.status === 409){
+        this.setState({isLoading: false, isValid: false, response: "System Error - Item Description Already Exists"});
+      }
+      else{
+        console.log(error);
+        this.setState({isLoading: false, isValid: false, response: "System Error - Item not created"});
+      }
+    });
+  }
+
   render() {
     return (
       <div className="newItem" id="newItem">
@@ -202,35 +227,24 @@ export default class NewItem extends React.Component {
         </Col>
         </Row> <hr/>
         <h4>Item Matrix Information:</h4>
-        <Table striped>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Color</th>
-              <th>Size</th>
-              <th>Sku</th>
-              <th>Alt Sku</th>
-              <th>Qty</th>
-            </tr>
-          </thead>
-          <tbody>
-            {(this.state.formData.matrix || []).map((item, index) => (
-              <tr key={index}>
-                <th scope="row">{index+1}</th>
-                <td>
-                  <Input key={"color" + index} bsSize="sm" value={this.state.formData.matrix[index].color} name={"color" + index} onChange={(event)=>{this.handleArrayChange(event, "color", index)}} placeholder="Color"/>
-                </td>
-                <td>
-                  <Input key={"size" + index} bsSize="sm" value={this.state.formData.matrix[index].size} name={"size" + index} onChange={(event)=>{this.handleArrayChange(event, "size", index)}} placeholder="Size"/>
-                </td>
-                <td><Input key={"color" + index} bsSize="sm" value={this.state.formData.matrix[index].sku} name={"sku" + index} onChange={(event)=>{this.handleArrayChange(event, "sku", index)}} placeholder="Sku"/></td>
-                <td><Input key={"color" + index} bsSize="sm" value={this.state.formData.matrix[index].altSku} name={"altSku" + index} onChange={(event)=>{this.handleArrayChange(event, "altSku", index)}} placeholder="Alt Sku"/></td>
-                <td><Input key={"color" + index} bsSize="sm" value={this.state.formData.matrix[index].qty} name={"qty" + index} onChange={(event)=>{this.handleArrayChange(event, "qty", index)}} placeholder="Qty"/></td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
+        <Row>
+        <div className="d-inline-flex px-2"><h5>#</h5></div>
+        <Col xs={5}><h5>Color</h5></Col>
+        <Col xs={5}><h5>Size</h5></Col>
+        </Row>
+        {(this.state.formData.matrix || []).map((item, index) => (
+          <Row key={index}>
+            <div className="d-inline-flex px-2 my-auto">{index+1}</div>
+            <Col sm={5}>
+              <Input key={"color" + index} value={this.state.formData.matrix[index].color} name={"color" + index} onChange={(event)=>{this.handleArrayChange(event, "color", index)}} placeholder="Color"/>
+            </Col>
+            <Col sm={5}>
+              <Input key={"size" + index} value={this.state.formData.matrix[index].size} name={"size" + index} onChange={(event)=>{this.handleArrayChange(event, "size", index)}} placeholder="Size"/>
+            </Col>
+          </Row>
+        ))}
       </Form>
+
       </Container>
       </div>
       </div>
