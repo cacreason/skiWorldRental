@@ -9,6 +9,23 @@ var passport = require('passport')
 var router = express.Router();
 var Item = require('../models/item');
 
+router.post('/admin/inventory/getitems', function(req, res){
+  const query = req.body.parent ? req.body.parent : "";
+  const sanitizedQuery = query.replace(/[-\/\\^$*+?.()|[\]{}]/g, '');
+  console.log(sanitizedQuery);
+  Item.getChildItemByParentId(sanitizedQuery, function(err, item){
+    if(err) throw err;
+    if(item){
+      console.log("Item Search: " + item);
+      res.json(item);
+    }
+    else{
+      res.status(409);
+      res.send({express: "Item doesn't exist"});
+    }
+  });
+});
+
 router.post('/admin/inventory/search', function(req, res){
   const query = req.body.search? req.body.search : "";
   const sanitizedQuery = query.replace(/[-\/\\^$*+?.()|[\]{}]/g, '');
@@ -34,9 +51,9 @@ router.post('/admin/inventory/newitem', function(req, res){
       parent: '',
       color: item.matrix[i].color,
       size: item.matrix[i].size,
-      qty: 0,
-      sku: '',
-      altsku: '',
+      qty: item.matrix[i].qty,
+      sku: item.matrix[i].sku,
+      altsku: item.matrix[i].altSku,
       description: item.description + " " + item.matrix[i].color + " " + item.matrix[i].size,
       category: item.category,
       price: item.price
@@ -91,9 +108,4 @@ router.post('/admin/inventory/newitem', function(req, res){
 	}
 });
 
-router.get('/admin/logout', function(req, res){
-  console.log(req.user.username + " Logged Out.");
-  req.logout();
-  res.redirect('/admin/login');
-});
 module.exports = router;

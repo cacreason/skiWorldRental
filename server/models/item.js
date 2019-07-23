@@ -89,13 +89,16 @@ module.exports.findItemAndUpdate = function(id, update, callback){
 
 module.exports.getItemByDescription = function(description, callback){
 	var query = {description: description};
-	console.log(query);
 	Item.findOne(query, callback);
 }
 
 module.exports.getChildItemByDescription = function(description, callback){
 	let regex = new RegExp(description, 'gi');
 	var query = {description: regex};
-	console.log(query);
+	ChildItem.find(query, callback);
+}
+
+module.exports.getChildItemByParentId = function(parentid, callback){
+	let query = {parent: parentid};
 	ChildItem.find(query, callback);
 }

@@ -1,14 +1,13 @@
 //Admin Update Item Page for Ski World Rental Management Platform
-// 7/22/19
-//Post request is submitted to admin/updateItem and upon receipt parent/child mongo documents are updated.
-
+// 7/23/19
+//Post request is submitted to admin/updateItem and upon receipt parent/child item documents are updated.
 import React from 'react';
-import { Container, Row, Col, Button, Form, FormGroup, Label, Input, Spinner } from 'reactstrap';
+import { Container, Row, Col, Button, Form, FormGroup, Label, Input, Spinner, Table } from 'reactstrap';
 import axios from 'axios';
 import AdminNav from '../../../components/AdminNav/AdminNav';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
-export default class Item extends React.Component {
+export default class NewItem extends React.Component {
   constructor(props) {
     super(props);
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -18,10 +17,8 @@ export default class Item extends React.Component {
       isValid: Boolean,
       isLoading: false,
       response: "",
-      parentData: {},
-      childData: [],
       formData: {
-        parentID: this.props.location.state.returnedJSON,
+        parentId: this.props.location.state.returnedJSON,
         description: "",
         category: "Ski",
         price: "",
@@ -31,7 +28,7 @@ export default class Item extends React.Component {
           size: "",
           sku: "",
           altSku: "",
-          qty: 0
+          qty: ""
         }]
       }
     };
@@ -121,7 +118,7 @@ export default class Item extends React.Component {
   }
 
   callApi = async (data) => {
-    axios.post("/admin/inventory/newitem", data, {
+    axios.post("/admin/inventory/updateitem", data, {
       headers: {
           'Content-Type': 'application/json'
       }
@@ -154,20 +151,40 @@ export default class Item extends React.Component {
       }
     }
 
-  getItemData = (parentID) => {
-    axios.post("/admin/inventory/updateitem", parentID, {
+  fetchItemData = (query) => {
+    axios.post("/admin/inventory/getitems", JSON.stringify({parent:query}), {
       headers: {
           'Content-Type': 'application/json'
       }
     })
     .then((response) => {
+      console.log(response.data.length);
+      let formData = JSON.parse(JSON.stringify(this.state.formData));
       console.log(response);
-      if (response.status === 200){
-        this.setState({parentData: response.parentData, childData: response.childData});
+      for(let i = 0; i < response.data.length; i++){
+        console.log(i);
+        if(i === 0){
+          let str = response.data[i].description;
+          let match = response.data[i].color + " " + response.data[i].size;
+          let filteredStr = str.replace(match, "");
+          formData.description = filteredStr;
+          formData.category = response.data[i].category;
+          formData.price = response.data[i].price;
+          formData.brand = response.data[i].brand?response.data[i].brand:"";  //NEED TO STORE BRAND ON CHILD SCHEMA
+          formData.matrix = [];
+        }
+        formData.matrix.push({
+          color: response.data[i].color,
+          size: response.data[i].size,
+          sku: response.data[i].sku,
+          altSku: response.data[i].altSku?response.data[i].altSku:"",
+          qty: response.data[i].qty
+        });
       }
+      this.setState({formData: formData});
     })
     .catch((error) => {
-      if (error.response.status === 409){
+      if (error){
         this.setState({isLoading: false, isValid: false, response: "System Error - Item Description Already Exists"});
       }
       else{
@@ -177,15 +194,18 @@ export default class Item extends React.Component {
     });
   }
 
+  componentDidMount(){
+    this.fetchItemData(this.state.formData.parentId);
+  }
   render() {
     return (
       <div className="newItem" id="newItem">
-      <AdminNav breadcrumb={<span className="mx-auto"><FontAwesomeIcon icon="boxes" size="sm"/> Inventory / New Item</span>} isOpen={this.isOpenCallback}/>
+      <AdminNav breadcrumb={<span className="mx-auto"><FontAwesomeIcon icon="boxes" size="sm"/> Inventory / Update Item</span>} isOpen={this.isOpenCallback}/>
       <div id="adminContent" className={this.state.mainContentLMargin}>
       <Container fluid>
       <Form className="text-left" onSubmit={e=>this.handleSubmit(e)}>
       <div className="d-flex">
-        <Button className="d-flex" color="success">Create Item Matrix</Button>
+        <Button className="d-flex" color="primary">Update Item Matrix</Button>
         {this.state.isLoading ? <Spinner type="grow" color="dark" /> : ""}
         {this.state.isValid ? <p className='text-success mx-3 my-auto'>{this.state.response}</p> : <p className='text-danger mx-3 my-auto'>{this.state.response}</p>}
       </div><hr/>
@@ -227,24 +247,35 @@ export default class Item extends React.Component {
         </Col>
         </Row> <hr/>
         <h4>Item Matrix Information:</h4>
-        <Row>
-        <div className="d-inline-flex px-2"><h5>#</h5></div>
-        <Col xs={5}><h5>Color</h5></Col>
-        <Col xs={5}><h5>Size</h5></Col>
-        </Row>
-        {(this.state.formData.matrix || []).map((item, index) => (
-          <Row key={index}>
-            <div className="d-inline-flex px-2 my-auto">{index+1}</div>
-            <Col sm={5}>
-              <Input key={"color" + index} value={this.state.formData.matrix[index].color} name={"color" + index} onChange={(event)=>{this.handleArrayChange(event, "color", index)}} placeholder="Color"/>
-            </Col>
-            <Col sm={5}>
-              <Input key={"size" + index} value={this.state.formData.matrix[index].size} name={"size" + index} onChange={(event)=>{this.handleArrayChange(event, "size", index)}} placeholder="Size"/>
-            </Col>
-          </Row>
-        ))}
+        <Table striped>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Color</th>
+              <th>Size</th>
+              <th>Sku</th>
+              <th>Alt Sku</th>
+              <th>Qty</th>
+            </tr>
+          </thead>
+          <tbody>
+            {(this.state.formData.matrix || []).map((item, index) => (
+              <tr key={index}>
+                <th scope="row">{index+1}</th>
+                <td>
+                  <Input key={"color" + index} bsSize="sm" value={this.state.formData.matrix[index].color} name={"color" + index} onChange={(event)=>{this.handleArrayChange(event, "color", index)}} placeholder="Color"/>
+                </td>
+                <td>
+                  <Input key={"size" + index} bsSize="sm" value={this.state.formData.matrix[index].size} name={"size" + index} onChange={(event)=>{this.handleArrayChange(event, "size", index)}} placeholder="Size"/>
+                </td>
+                <td><Input key={"color" + index} bsSize="sm" value={this.state.formData.matrix[index].sku} name={"sku" + index} onChange={(event)=>{this.handleArrayChange(event, "sku", index)}} placeholder="Sku"/></td>
+                <td><Input key={"color" + index} bsSize="sm" value={this.state.formData.matrix[index].altSku} name={"altSku" + index} onChange={(event)=>{this.handleArrayChange(event, "altSku", index)}} placeholder="Alt Sku"/></td>
+                <td><Input key={"color" + index} bsSize="sm" value={this.state.formData.matrix[index].qty} name={"qty" + index} onChange={(event)=>{this.handleArrayChange(event, "qty", index)}} placeholder="Qty"/></td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
       </Form>
-
       </Container>
       </div>
       </div>
