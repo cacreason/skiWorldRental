@@ -19,7 +19,7 @@
     "express-session": "^1.16.1",
     "express-validator": "^5.3.1",
     "i": "^0.3.6",
-    "mongoose": "^5.5.11",
+    "mongoose": "^5.7.5",
     "nodemailer": "^6.2.1",
     "npm": "^6.9.0",
     "passport": "^0.4.0",
